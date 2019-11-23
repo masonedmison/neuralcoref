@@ -557,6 +557,9 @@ cdef class NeuralCoref(object):
         # Load from disk
         self.from_disk(NEURALCOREF_MODEL_PATH)
 
+        # overwrite to test scispacy vectors in place of neuralcoref vectors (tuned)
+        self.tuned_vectors = self.vocab.vectors 
+
     def __reduce__(self):
         return (NeuralCoref, (self.vocab, self.model), None, None)
 
@@ -619,6 +622,7 @@ cdef class NeuralCoref(object):
             blacklist = self.cfg_inference.get('blacklist', True)
 
         self.set_conv_dict(conv_dict)
+
 
         for docs in util.minibatch(stream, size=batch_size):
             docs = list(docs)
