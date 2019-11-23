@@ -132,7 +132,8 @@ KEEP_DEP = ["nsubj", "dobj", "iobj", "pobj"]
 REMOVE_POS = ["CCONJ", "INTJ", "ADP"]
 LOWER_NOT_END = ["'s", ',', '.', '!', '?', ':', ';']
 PUNCTS = [".", "!", "?"]
-ACCEPTED_ENTS = ["PERSON", "NORP", "FACILITY", "ORG", "GPE", "LOC", "PRODUCT", "EVENT", "WORK_OF_ART", "LANGUAGE"]
+ACCEPTED_ENTS = ["PERSON", "NORP", "FACILITY", "ORG", "GPE", "LOC", "PRODUCT", "EVENT", "WORK_OF_ART", "LANGUAGE", "ENTITY"]
+# ACCEPTED_ENTS = ['ENTITY']  # hack to test SciSpacy Models
 
 ##########################################################
 ##### UTILITIES TO CONVERT STRINGS IN SPACY HASHES #######
