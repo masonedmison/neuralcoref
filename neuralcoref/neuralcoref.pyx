@@ -62,7 +62,7 @@ DEF MAX_ITER = 100
 DEF SPAN_FACTOR = 4
 
 DEF SIZE_WORD = 8 # number of words in a mention (tuned embeddings)
-DEF SIZE_EMBEDDING = 50 # size of the words embeddings
+DEF SIZE_EMBEDDING = 200 # size of the words embeddings
 DEF SIZE_SPAN = 5 * SIZE_EMBEDDING # size of the span vector (averaged word embeddings)
 DEF SIZE_PAIR_FEATS = 63 # number of features for a pair of mention
 DEF SIZE_FP_COMPRESSED = 9 # size of the features for a pair of mentions as stored in numpy arrays
@@ -557,8 +557,14 @@ cdef class NeuralCoref(object):
         # Load from disk
         self.from_disk(NEURALCOREF_MODEL_PATH)
 
+        # unk_hash = 77186543510594498
+        # self.unk_vec = numpy.random.dirichlet(numpy.ones(10),size=1)
+
+        # self.vocab.vectors.add(unk_hash, vector=unk_vec)
         # overwrite to test scispacy vectors in place of neuralcoref vectors (tuned)
         self.tuned_vectors = self.vocab.vectors 
+        self.static_vectors = self.vocab.vectors
+
 
     def __reduce__(self):
         return (NeuralCoref, (self.vocab, self.model), None, None)
@@ -881,7 +887,8 @@ cdef class NeuralCoref(object):
         return self.hashes.digit_word if token.is_digit else token.lower
 
     def get_static(self, hash_t word):
-        return self.static_vectors[word] if word in self.static_vectors else self.static_vectors[self.hashes.unknown_word]
+        unk_vec = numpy.random.dirichlet(numpy.ones(10),size=1)
+        return self.static_vectors[word] if word in self.static_vectors else unk_vec
 
     def get_word_embedding(self, Token token, bint tuned=True):
         hash_w = self.normalize(token)
